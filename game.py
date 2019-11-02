@@ -43,10 +43,11 @@ while rodando:
         if event.type == pygame.QUIT:
             rodando = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                vel = -10
-            elif event.key == pygame.K_DOWN:
-                vel = 10
+            if event.key == pygame.K_SPACE:
+                if vel == 0:
+                    vel = 10
+                else:
+                    vel = vel * -1
     
     tela.fill(branco)
     
