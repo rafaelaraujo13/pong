@@ -18,7 +18,7 @@ comprimento_tela = 640
 tela = pygame.display.set_mode((comprimento_tela, altura_tela))
 
 # config da raquete do jogador
-tam = 100
+tam = 80
 pos_usu = (altura_tela / 2) - 50
 vel = 0
 
@@ -39,13 +39,38 @@ def computador_esta_colidindo():
     else:
         return False
        
-
+ 
 # criar raquetes
 def raquete(lado):
+    c = -10
     if lado == 'esquerda':
-        pygame.draw.rect(tela, preto, (0, pos_usu, 20, tam))
+        for i in range(0, int(tam / 10)):
+            c += 10
+            pygame.draw.rect(tela, branco, (0, pos_usu + c, 20, 10))
+
     elif lado == 'direita':
-        pygame.draw.rect(tela, preto, (comprimento_tela - 20, pos_comp, 20, tam))
+        for i in range(0, int(tam / 10)):
+            c += 10
+            pygame.draw.rect(tela, branco, (comprimento_tela - 20, pos_comp + c, 20, 10))
+
+
+# configurações da bola
+velx_bola = -10
+vely_bola = 0
+posx_bola = (comprimento_tela / 2)
+posy_bola = (altura_tela / 2)
+
+# criar bola
+def bola():
+    pygame.draw.rect(tela, branco, (posx_bola, posy_bola, 10, 10))
+    
+# colisão da bola com as raquetes
+def bola_na_raquete():
+    if posx_bola == 20 or posx_bola == comprimento_tela - 20:
+        if posy_bola in range(int(pos_usu), int(pos_usu + 100)):
+            return True
+    else:
+        return False
 
 # loop do jogo
 while rodando:
@@ -59,9 +84,9 @@ while rodando:
                 else:
                     vel = 10
 
-    tela.fill(branco)
+    tela.fill(preto)
     
-    # checa se chegaram na borda
+    # checa se as raquetes chegaram na borda ou a bolinha bateu nelas
 
     if jogador_esta_colidindo():
         vel = vel * -1
@@ -69,17 +94,24 @@ while rodando:
     if computador_esta_colidindo():
         vel_comp = vel_comp * -1
 
-    # faz as raquetes andarem
+    if bola_na_raquete():
+        velx_bola = velx_bola * -1
+
+    # faz as raquetes e bola andarem
 
     pos_comp += vel_comp
     pos_usu += vel
+    posx_bola += velx_bola
+    posy_bola += vely_bola
 
-    # cria as raquetes
+    # cria as raquetes e bola
 
     raquete('esquerda')
     raquete('direita')
-    print(jogador_esta_colidindo())
-    
+    bola()
+
+    print(pos_usu, posx_bola)
+
     # atualiza a tela
     pygame.display.update()
     clock.tick(30)
