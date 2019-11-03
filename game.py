@@ -1,4 +1,5 @@
 import pygame
+from random import randint, choice
 
 # iniciando pygame
 try:
@@ -16,6 +17,11 @@ clock = pygame.time.Clock()
 altura_tela = 480
 comprimento_tela = 640
 tela = pygame.display.set_mode((comprimento_tela, altura_tela))
+
+# config do jogo
+pontos_jog = 0
+pontos_comp = 0
+
 
 # config da raquete do jogador
 tam = 80
@@ -48,6 +54,14 @@ def raquete(lado):
     elif lado == 'direita':
         pygame.draw.rect(tela, branco, (comprimento_tela - 20, pos_comp, 20, tam))
 
+# controla os movimentos da raquete do computador (aleatórios)
+def comp_vai_mexer():
+    vai_ou_nao = randint(1, 30)
+    if vai_ou_nao == 1:
+        return True
+    else:
+        return False
+
 
 # configurações da bola
 velx_bola = -10
@@ -64,7 +78,7 @@ def bola():
 def bola_na_raquete():
     if posx_bola == 20:
         return 'jogador'
-    elif posx_bola == comprimento_tela - 20:
+    elif posx_bola + 10 == comprimento_tela - 20:
         return 'computador'
     else:
         return False
@@ -100,28 +114,13 @@ def definir_velocidade_bola(lado):
             vely_bola = 5
         
     elif lado == 'computador':
-        if posy_bola >= pos_comp and posy_bola < pos_comp + 10:
+        if posy_bola >= pos_comp and posy_bola < pos_comp + 20:
             velx_bola = velx_bola * -1
             vely_bola = -5
-        elif posy_bola >= pos_comp + 10 and posy_bola < pos_comp + 20:
-            velx_bola = velx_bola * -1
-            vely_bola = -4
-        elif posy_bola >= pos_comp + 20 and posy_bola < pos_comp + 30:
-            velx_bola = velx_bola * -1
-            vely_bola = -3
-        elif posy_bola >= pos_comp + 30 and posy_bola < pos_comp + 40:
+        elif posy_bola >= pos_comp + 20 and posy_bola < pos_comp + 60:
             velx_bola = velx_bola * -1
             vely_bola = 0
-        elif posy_bola >= pos_comp + 40 and posy_bola < pos_comp + 50:
-            velx_bola = velx_bola * -1
-            vely_bola = 0
-        elif posy_bola >= pos_comp + 50 and posy_bola < pos_comp + 60:
-            velx_bola = velx_bola * -1
-            vely_bola = 3
-        elif posy_bola >= pos_comp + 60 and posy_bola < pos_comp + 70:
-            velx_bola = velx_bola * -1
-            vely_bola = 4
-        elif posy_bola >= pos_comp + 70 and posy_bola < pos_comp + 80:
+        elif posy_bola >= pos_comp + 60 and posy_bola < pos_comp + 80:
             velx_bola = velx_bola * -1
             vely_bola = 5
 
@@ -155,8 +154,6 @@ while rodando:
 
     tela.fill(preto)
 
-    
-    
     # checa se as raquetes chegaram na borda ou a bolinha bateu nelas
 
     if jogador_esta_colidindo():
@@ -166,6 +163,12 @@ while rodando:
         vel_comp = vel_comp * -1
 
     colisao = bola_na_raquete()
+
+
+    # controla o movimento da raquete do computador
+    if comp_vai_mexer():
+        vel_comp = vel_comp * -1
+
 
     # muda a velocidade da bolinha
 
@@ -179,10 +182,22 @@ while rodando:
 
     # checa se foi gol
 
-    ganhador = pontuou()
-    if ganhador != False:
-        print(ganhador + ' ganhou!!!!')
-        rodando = False
+    pontuador = pontuou()
+    if pontuador != False:
+        print(pontuador + 'pontuou')
+        if pontuador == 'jogador':
+            pontos_jog = pontos_jog + 1
+        elif pontuador == 'computador':
+            pontos_comp = pontos_comp + 1
+        
+        print(f'Jogador: {pontos_jog}')
+        print(f'Computador: {pontos_comp}')
+        posx_bola = comprimento_tela / 2
+        posy_bola = altura_tela / 2
+        vely_bola = choice([5, -5])
+        vel = 0
+        pos_comp = (altura_tela / 2) - 50
+        pos_usu = (altura_tela / 2) - 50
 
     # faz as raquetes e bola andarem
 
