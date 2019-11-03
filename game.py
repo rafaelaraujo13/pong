@@ -1,5 +1,6 @@
 import pygame
 from random import randint, choice
+from time import sleep
 
 # iniciando pygame
 try:
@@ -24,7 +25,7 @@ pontos_comp = 0
 
 
 # config da raquete do jogador
-tam = 80
+tam = 120
 pos_usu = (altura_tela / 2) - 50
 vel = 0
 
@@ -56,7 +57,7 @@ def raquete(lado):
 
 # controla os movimentos da raquete do computador (aleatórios)
 def comp_vai_mexer():
-    vai_ou_nao = randint(1, 30)
+    vai_ou_nao = randint(1, 25)
     if vai_ou_nao == 1:
         return True
     else:
@@ -65,7 +66,7 @@ def comp_vai_mexer():
 
 # configurações da bola
 velx_bola = -10
-vely_bola = 0
+vely_bola = choice([0, 5, -5])
 posx_bola = (comprimento_tela / 2) 
 posy_bola = (altura_tela / 2)
 bola_rebatida = False
@@ -88,39 +89,24 @@ def definir_velocidade_bola(lado):
     global velx_bola, vely_bola
 
     if lado == 'jogador':
-        if posy_bola >= pos_usu and posy_bola < pos_usu + 10:
+        if posy_bola >= pos_usu and posy_bola < pos_usu + 40:
             velx_bola = velx_bola * -1
             vely_bola = -5
-        elif posy_bola >= pos_usu + 10 and posy_bola < pos_usu + 20:
-            velx_bola = velx_bola * -1
-            vely_bola = -4
-        elif posy_bola >= pos_usu + 20 and posy_bola < pos_usu + 30:
-            velx_bola = velx_bola * -1
-            vely_bola = -3
-        elif posy_bola >= pos_usu + 30 and posy_bola < pos_usu + 40:
+        elif posy_bola >= pos_usu + 40 and posy_bola < pos_usu + 80:
             velx_bola = velx_bola * -1
             vely_bola = 0
-        elif posy_bola >= pos_usu + 40 and posy_bola < pos_usu + 50:
-            velx_bola = velx_bola * -1
-            vely_bola = 0
-        elif posy_bola >= pos_usu + 50 and posy_bola < pos_usu + 60:
-            velx_bola = velx_bola * -1
-            vely_bola = 3
-        elif posy_bola >= pos_usu + 60 and posy_bola < pos_usu + 70:
-            velx_bola = velx_bola * -1
-            vely_bola = 4
-        elif posy_bola >= pos_usu + 70 and posy_bola < pos_usu + 80:
+        elif posy_bola >= pos_usu + 80 and posy_bola < pos_usu + 120:
             velx_bola = velx_bola * -1
             vely_bola = 5
         
     elif lado == 'computador':
-        if posy_bola >= pos_comp and posy_bola < pos_comp + 20:
+        if posy_bola >= pos_comp and posy_bola < pos_comp + 40:
             velx_bola = velx_bola * -1
             vely_bola = -5
-        elif posy_bola >= pos_comp + 20 and posy_bola < pos_comp + 60:
+        elif posy_bola >= pos_comp + 40 and posy_bola < pos_comp + 80:
             velx_bola = velx_bola * -1
             vely_bola = 0
-        elif posy_bola >= pos_comp + 60 and posy_bola < pos_comp + 80:
+        elif posy_bola >= pos_comp + 80 and posy_bola < pos_comp + 120:
             velx_bola = velx_bola * -1
             vely_bola = 5
 
@@ -184,7 +170,7 @@ while rodando:
 
     pontuador = pontuou()
     if pontuador != False:
-        print(pontuador + 'pontuou')
+        
         if pontuador == 'jogador':
             pontos_jog = pontos_jog + 1
         elif pontuador == 'computador':
@@ -195,6 +181,7 @@ while rodando:
         posx_bola = comprimento_tela / 2
         posy_bola = altura_tela / 2
         vely_bola = choice([5, -5])
+        velx_bola = choice([10, -10])
         vel = 0
         pos_comp = (altura_tela / 2) - 50
         pos_usu = (altura_tela / 2) - 50
