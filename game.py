@@ -5,19 +5,28 @@ from time import sleep
 # iniciando pygame
 try:
     pygame.init()
+    pygame.font.init()
 except:
     print('Erro ao carregar módulo Pygame')
+
+# configurando tela
+altura_tela = 480
+comprimento_tela = 640
+tela = pygame.display.set_mode((comprimento_tela, altura_tela))
 
 # variáveis principais
 rodando = True
 branco = (255, 255, 255)
 preto = (0, 0, 0)
 clock = pygame.time.Clock()
+fonte = pygame.font.get_default_font()
+fonte_placar = pygame.font.SysFont(fonte, 45)
+msg = '0 x 0'
+text = fonte_placar.render(msg, True, branco)
+text_rect = text.get_rect()
+text_rect.center = (comprimento_tela / 2, 30)
 
-# configurando tela
-altura_tela = 480
-comprimento_tela = 640
-tela = pygame.display.set_mode((comprimento_tela, altura_tela))
+
 
 # config do jogo
 pontos_jog = 0
@@ -134,7 +143,7 @@ while rodando:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if vel != 0:
-                    vel = vel * -1
+                    vel = vel * -1 
                 else:
                     vel = 10
 
@@ -186,6 +195,10 @@ while rodando:
         pos_comp = (altura_tela / 2) - 50
         pos_usu = (altura_tela / 2) - 50
 
+        
+        msg = f'{pontos_jog} x {pontos_comp}'
+        text = fonte_placar.render(msg, True, branco)
+
     # faz as raquetes e bola andarem
 
     pos_comp += vel_comp
@@ -198,6 +211,10 @@ while rodando:
     raquete('esquerda')
     raquete('direita') 
     bola()
+
+    # placar
+
+    tela.blit(text, text_rect)
 
     # atualiza a tela
     pygame.display.update()
