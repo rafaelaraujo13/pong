@@ -1,8 +1,7 @@
-# ponggame
+# pong
 
 ping pong game using pygame
 
-![](/images/terminal.png)
 ![](/images/game.png)
 
 ## How to use
