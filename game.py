@@ -42,6 +42,13 @@ vel = 0
 pos_comp = (altura_tela / 2) - 50
 vel_comp = 10
 
+# configurações da bola
+velx_bola = -10
+vely_bola = choice([0, 5, -5])
+posx_bola = (comprimento_tela / 2) 
+posy_bola = (altura_tela / 2)
+bola_rebatida = False
+
 # colisão das raquetes com a borda do jogo
 def jogador_esta_colidindo():
     if pos_usu == 0 or pos_usu + tam == altura_tela:
@@ -64,21 +71,19 @@ def raquete(lado):
     elif lado == 'direita':
         pygame.draw.rect(tela, branco, (comprimento_tela - 20, pos_comp, 20, tam))
 
-# controla os movimentos da raquete do computador (aleatórios)
+# controla os movimentos da raquete do computador (seguindo a bolinha)
 def comp_vai_mexer():
-    vai_ou_nao = randint(1, 25)
-    if vai_ou_nao == 1:
-        return True
-    else:
-        return False
+    if not computador_esta_colidindo():
+        posicao_que_a_bola_vai_bater = randint(0, tam)
+        if posx_bola > comprimento_tela / 2:
+            if posy_bola > pos_comp + posicao_que_a_bola_vai_bater:
+                if vel_comp != 10:
+                    return True
+            else:
+                if vel_comp != -10:
+                    return True
 
-
-# configurações da bola
-velx_bola = -10
-vely_bola = choice([0, 5, -5])
-posx_bola = (comprimento_tela / 2) 
-posy_bola = (altura_tela / 2)
-bola_rebatida = False
+    return False
 
 # criar bola
 def bola():
@@ -142,7 +147,7 @@ while rodando:
             rodando = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if vel != 0:
+                if vel != 0 and not jogador_esta_colidindo():
                     vel = vel * -1 
                 else:
                     vel = 10
